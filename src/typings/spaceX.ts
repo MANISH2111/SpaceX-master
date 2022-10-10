@@ -54,7 +54,7 @@ type TPayload = {
 	orbit_params: Orbit;
 };
 
-type Rocket = {
+export type Rocket = {
 	rocket_id: string;
 	rocket_name: string;
 	rocket_type: string;
@@ -89,7 +89,7 @@ type Links = {
 	flickr_images: string[];
 };
 
-type LaunchSite = {
+export type LaunchSite = {
 	site_id: string;
 	site_name: string;
 	site_name_long: string;

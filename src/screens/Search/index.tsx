@@ -8,6 +8,10 @@ import { ScrollView } from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
 
 import { launchJson } from 'data/dummy';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store/rootReducer';
+import { LaunchSite, Rocket, TSpaceX } from 'typings/spaceX';
+// import { getEachItem } from 'utils/algo';
 
 type Props = {
 	navigation: StackNavigationProp<RootStackParamList, 'Search'>;
@@ -46,13 +50,78 @@ const Placeholder = styled(Typography)`
 	padding-top: 12px;
 	color: ${(props) => props.theme.colors.grey2};
 `;
-
+type TData = {
+	placeholder: string;
+	dataSource: string[];
+};
 const Search: React.ComponentType<Props> = () => {
 	const [searchText, setSearchText] = useState('');
 	const [height] = React.useState<number>(400);
 	const [dropdown, setDropdown] = React.useState<boolean>(false);
 	const animatedvalue = useRef(new Animated.Value(70)).current;
 	const [data, setData] = useState<any>([]);
+
+	const launches = useSelector(
+		(state: RootState) => state.main.spaceXDataSource,
+	);
+  
+	const filterFields = ['rocket_name', 'mission_name', 'site_name'];
+	
+
+	const extractData = useCallback(
+		(rockets: TSpaceX[], searchTerm: string) => {
+			const launchJson: TData[] = filterFields.map((field) => ({
+				placeholder: field,
+				dataSource: [],
+			}));
+
+			rockets.forEach(
+				(rocket: {
+					mission_name: string;
+					rocket: Rocket;
+					launch_site: LaunchSite;
+				}) => {
+					let {
+						mission_name,
+						rocket: { rocket_name },
+						launch_site: { site_name },
+					} = rocket;
+
+					mission_name = mission_name.toLowerCase();
+					rocket_name = rocket_name.toLowerCase();
+					site_name = site_name.toLowerCase();
+					searchTerm = searchTerm.toLowerCase();
+
+					if (mission_name.includes(searchTerm)) {
+						const index = launchJson.findIndex(
+							(j) => j.placeholder === 'mission_name',
+						);
+						if (launchJson[index].dataSource.length < 3)
+							launchJson[index].dataSource.push(mission_name);
+					}
+
+					if (rocket_name.includes(searchTerm)) {
+						const index = launchJson.findIndex(
+							(j) => j.placeholder === 'rocket_name',
+						);
+						if (launchJson[index].dataSource.length < 3)
+							launchJson[index].dataSource.push(rocket_name);
+					}
+
+					if (site_name.includes(searchTerm)) {
+						const index = launchJson.findIndex(
+							(j) => j.placeholder === 'site_name',
+						);
+						if (launchJson[index].dataSource.length < 3)
+							launchJson[index].dataSource.push(site_name);
+					}
+				},
+			);
+
+			return launchJson.filter((json) => json.dataSource.length > 0);
+		},
+		[searchText,data],
+	);
 
 	const slidedown = useCallback(() => {
 		setDropdown(true);
@@ -74,13 +143,13 @@ const Search: React.ComponentType<Props> = () => {
 	const searchLaunches = (text: any) => {
 		if (text === '') setData([]);
 		else {
-			setData(launchJson);
+			const x = extractData(launches, text);
+			setData(x);
 			slidedown();
 		}
 		setSearchText(text);
 	};
 
-	console.log('toFilter', data, 'text', searchText);
 
 	return (
 		<Wrapper>
