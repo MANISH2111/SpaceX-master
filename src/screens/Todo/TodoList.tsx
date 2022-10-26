@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { FlatList } from 'react-native';
 import { Realm } from '@realm/react';
 import { Todo } from 'models/Todo';

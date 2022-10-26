@@ -10,7 +10,6 @@ import { TodoList } from './TodoList';
 const Wrapper = styled.View`
 	align-items: center;
 	margin: 100px 50px 0 50px;
-
 	height: 18%;
 `;
 
@@ -20,13 +19,13 @@ const AllTodo = () => {
 	const userId = useUser()?.id;
 
 	const result = useQuery(Todo);
-	console.log(result);
+	console.log('PPPP',result);
 
 	const todos = useMemo(() => result.sorted('createdAt'), [result]);
 
 	console.log(
 		'dddfff',
-		todos.map((x) => x.todo),
+		todos,
 	);
 
 	const handleAddTodo = useCallback(
@@ -67,23 +66,23 @@ const AllTodo = () => {
 		});
 	}, [realm, result]);
 
-	const Todos = useMemo(() => {
-		return <TodoInput onSubmit={handleAddTodo} />;
-	}, [result]);
+	const List=useMemo(()=>{
+		return 	<TodoList
+		todos={todos}
+		onDeleteTask={handleDeleteTask}
+		onToggleTaskStatus={handleToggleTaskStatus}
+	/>
+	},[todos,result,realm])
 
 	return (
 		<>
 			<Wrapper>
 				<Typography>ADD TODOS</Typography>
 				<Gutter />
-				{Todos}
+				<TodoInput placeholder='Add Your Todo' onSubmit={handleAddTodo} />
 			</Wrapper>
 			<Gutter />
-			<TodoList
-				todos={todos}
-				onDeleteTask={handleDeleteTask}
-				onToggleTaskStatus={handleToggleTaskStatus}
-			/>
+		{List}
 		</>
 	);
 };

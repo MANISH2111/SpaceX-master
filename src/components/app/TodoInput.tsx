@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { FlexRow, Gutter, Typography } from 'components/atoms';
 import { StyleSheet, TextInput } from 'react-native';
@@ -22,18 +22,16 @@ const Add = styled.TouchableOpacity`
 `;
 type Props = {
 	onSubmit: (todo: string) => void;
+	placeholder?:string
 };
 
-export const TodoInput: React.ComponentType<Props> = ({ onSubmit }, props) => {
+export const TodoInput: React.ComponentType<Props> = ({onSubmit,...props}) => {
 	const primaryGrey = useColor('PrimaryGrey');
 
 	const [todo, setTodo] = useState('');
 
-	console.log('ddf', todo);
-
 	const handleSubmit = () => {
 		onSubmit(todo);
-		console.log('sdsd', todo);
 		setTodo('');
 	};
 

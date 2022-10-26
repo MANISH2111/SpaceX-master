@@ -1,6 +1,6 @@
 import React from 'react';
 import Realm from 'realm';
-import { Alert, TouchableOpacity } from 'react-native';
+import { Alert} from 'react-native';
 import styled from 'styled-components/native';
 import { Gutter, Typography } from 'components/atoms';
 import { Todo } from 'models/Todo';
@@ -22,6 +22,8 @@ const CText = styled(Typography)<{ isSelected: boolean }>`
 	text-decoration-line: ${(props) =>
 		props.isSelected ? 'line-through' : 'none'};
 	opacity: ${(props) => (props.isSelected ? 0.5 : 1)};
+	font-weight:500;
+	
 `;
 const TouchWrapper = styled.TouchableOpacity`
 	flex: 1;
@@ -54,7 +56,7 @@ const TodoItem: React.ComponentType<Props> = ({
 		>
 			<Icon isSelected={todos.isComplete} />
 			<Gutter hSpacing={1} />
-			<CText isSelected={todos.isComplete}>{todos.todo}</CText>
+			<CText fontColor='black' fontSize='sm' isSelected={todos.isComplete}>{todos.todo}</CText>
 		</TouchWrapper>
 	);
 };
