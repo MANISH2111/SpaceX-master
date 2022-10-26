@@ -10,6 +10,7 @@ const Pallet = {
 	grey4: '#F0F4F6',
 	red: '#c43232',
 	lightRed: '#ffe8e7',
+
 	blue: '#87CEEB',
 	black: '#000',
 	green: '#66a366',
